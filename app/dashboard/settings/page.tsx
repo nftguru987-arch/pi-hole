@@ -23,6 +23,8 @@ export default function SettingsPage() {
   }
 
   const handleSaveOpenAIKey = async () => {
+    console.log('[v0] Save OpenAI key clicked', { openaiKey: openaiKey ? 'present' : 'missing' })
+    
     if (!openaiKey.trim()) {
       setTestResult({ success: false, message: 'Please enter an API key' })
       return
@@ -33,10 +35,14 @@ export default function SettingsPage() {
     localStorage.setItem('owner_whatsapp', ownerWhatsapp)
     setSavedKeys(true)
     setTestResult(null)
+    
+    console.log('[v0] OpenAI key saved successfully')
     setTimeout(() => setSavedKeys(false), 3000)
   }
 
   const handleTestOpenAIKey = async () => {
+    console.log('[v0] Test OpenAI key clicked', { openaiKey: openaiKey ? 'present' : 'missing' })
+    
     if (!openaiKey.trim()) {
       setTestResult({ success: false, message: 'Please enter an API key first' })
       return
@@ -44,6 +50,7 @@ export default function SettingsPage() {
 
     setTestLoading(true)
     try {
+      console.log('[v0] Calling /api/ai/test')
       const response = await fetch('/api/ai/test', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -51,8 +58,10 @@ export default function SettingsPage() {
       })
 
       const data = await response.json()
+      console.log('[v0] Test result', data)
       setTestResult(data)
     } catch (error) {
+      console.error('[v0] Test error', error)
       setTestResult({ 
         success: false, 
         message: 'Error testing API key. Check browser console.' 

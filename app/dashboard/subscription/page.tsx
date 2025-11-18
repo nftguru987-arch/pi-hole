@@ -31,6 +31,8 @@ export default function SubscriptionPage() {
   }, [])
 
   const handleRedeemKey = async () => {
+    console.log('[v0] Redeem button clicked', { redemptionKey, apiKey: apiKey ? 'present' : 'missing' })
+    
     if (!redemptionKey.trim()) {
       alert('Please enter a redemption key!')
       return
@@ -56,6 +58,8 @@ export default function SubscriptionPage() {
     
     const planType = validKeys[redemptionKey.toUpperCase() as keyof typeof validKeys]
     
+    console.log('[v0] Key validation', { redemptionKey, planType })
+    
     if (planType) {
       const expiry = new Date()
       expiry.setDate(expiry.getDate() + 30)
@@ -70,17 +74,22 @@ export default function SubscriptionPage() {
       setRedemptionSuccess(true)
       setRedemptionKey('')
       
+      console.log('[v0] Plan activated successfully', { planType, expiry })
+      
       setTimeout(() => {
         setRedemptionSuccess(false)
       }, 5000)
     } else {
       alert('Invalid redemption key. Please check and try again.')
+      console.log('[v0] Invalid key entered')
     }
     
     setIsRedeeming(false)
   }
 
   const handleActivatePlan = async (plan: PlanType) => {
+    console.log('[v0] Activate plan button clicked', { plan, apiKey: apiKey ? 'present' : 'missing' })
+    
     if (!apiKey.trim()) {
       alert('Please add your OpenAI API key first!')
       return
@@ -101,10 +110,13 @@ export default function SubscriptionPage() {
     setPlanExpiry(expiry)
     setIsActivating(false)
     
+    console.log('[v0] Plan activated', { plan, expiry })
     alert(`${plan?.toUpperCase()} plan activated successfully! Valid until ${expiry.toLocaleDateString()}`)
   }
 
   const handleSaveApiKey = () => {
+    console.log('[v0] Save API key button clicked', { apiKey: apiKey ? 'present' : 'missing' })
+    
     if (!apiKey.trim()) {
       alert('Please enter a valid OpenAI API key')
       return
@@ -113,6 +125,8 @@ export default function SubscriptionPage() {
     localStorage.setItem('customer_openai_key', apiKey)
     localStorage.setItem('openai_api_key', apiKey)
     setSavedKey(true)
+    
+    console.log('[v0] API key saved successfully')
     setTimeout(() => setSavedKey(false), 3000)
   }
 
